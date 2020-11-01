@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, session, url_for
+from flask import Flask, flash, render_template, request, jsonify, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -7,9 +7,12 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
+from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
+from PIL import Image
 from config import Config
 import settings
+from image_functions import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -23,9 +26,11 @@ jwt = JWTManager(app)
 
 from models import *
 
+#ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 @app.route("/")
 def hello():
-    return "Habla mani"
+    return render_template('index.html')
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -68,10 +73,11 @@ def login():
         return jsonify({"msg": "User not found"}), 404
 
     if not user.check_password(password):
-        return jsonify({"msg": "Password incorrect"}), 401
+        return jsonify({"msg": "Password from PIL import Imageincorrect"}), 401
 
     access_token = create_access_token(identity={"email": email})
     return jsonify(access_token=access_token), 200
+
 
 # protected test route
 @app.route('/test', methods=['GET'])
@@ -81,17 +87,23 @@ def test():
     email = user['email']
     return f'Welcome to the protected route {email}!', 200
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload_image():
-
     if request.method == "POST":
-
-        if request.files:
-
-            image = request.files["image"]
-            image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
-            print("Image saved")
-            return redirect(request.url)
+        if 'image' not in request.files:
+            flash('No file part')
+            return "No pic uploaded", 400
+        image = request.files['image']
+        if image.filename == '':
+            flash('No selected file')
+            return "No selected file", 400
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image = crop_images(app.config['IMAGE_UPLOADS'], image, 224, 224, 0, 1, 0, filename)
+            return jsonify({"msg": "Image has been cropped"}), 200
 
 if __name__ == '__main__':
     app.run()

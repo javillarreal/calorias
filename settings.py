@@ -8,5 +8,8 @@ flask = {
     'CSRF_ENABLED': os.getenv('CSRF_ENABLED'),
     'SQLALCHEMY_DATABASE_URI': os.getenv('DATABASE_URL'),
     'SESSION_TYPE': os.getenv('SESSION_TYPE'),
-    'JWT_SECRET_KEY': os.getenv('JWT_SECRET_KEY')
+    'SECRET_KEY': os.getenv('SECRET_KEY'),
+    'JWT_SECRET_KEY': os.getenv('JWT_SECRET_KEY'),
+    'IMAGE_UPLOADS': os.getenv('IMAGE_UPLOADS'),
+    'ALLOWED_EXTENSIONS': os.getenv('ALLOWED_EXTENSIONS')
 }
