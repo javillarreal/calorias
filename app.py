@@ -56,6 +56,26 @@ def register():
     except AttributeError:
         return 'Provide an Email and Password in JSON format in the request body', 400
 
+@app.route('/user/<int:id>')
+def get_user(id):
+    user = User.query.filter_by(id=id).first()
+    if not user:
+        return "No user with that ID"
+
+    return jsonify({"user": user.email}), 200
+
+@app.route('/user/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    if request.method == "DELETE":
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            return "No user with that ID"
+
+        db.session.delete(user)
+        db.session.commit()
+
+    return "User has been deleted", 200
+
 @app.route('/login', methods=['POST'])
 def login():
     if not request.is_json:
@@ -102,7 +122,9 @@ def upload_image():
             return "No selected file", 400
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
+            [filename,num] = filename.split(".")
             image = crop_images(app.config['IMAGE_UPLOADS'], image, 224, 224, 0, 1, 0, filename)
+            result = convert_to_numpy(app.config['IMAGE_UPLOADS'])
             return jsonify({"msg": "Image has been cropped"}), 200
 
 if __name__ == '__main__':
