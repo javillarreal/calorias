@@ -9,6 +9,7 @@ from flask_jwt_extended import (
 )
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
+from base64 import encodebytes
 from PIL import Image
 from config import Config
 import settings
@@ -124,8 +125,13 @@ def upload_image():
             filename = secure_filename(image.filename)
             [filename,num] = filename.split(".")
             image = crop_images(app.config['IMAGE_UPLOADS'], image, 224, 224, 0, 1, 0, filename)
-            result = convert_to_numpy(app.config['IMAGE_UPLOADS'])
-            return jsonify({"msg": "Image has been cropped"}), 200
+            if image != True:
+                return "Image needs to be 960x960 or higher", 400
+
+            encoded_images = get_images(app.config['IMAGE_UPLOADS'])
+            return jsonify({'result': encoded_images}) 
+            #result = convert_to_numpy(app.config['IMAGE_UPLOADS'])
+            #return jsonify({"msg": "Image has been cropped"}), 200
 
 if __name__ == '__main__':
     app.run()
