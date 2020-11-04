@@ -38,10 +38,12 @@ def crop_images(path, input, height, width, k, page, area, string):
         return True
 
 def get_images(dirpath):
+    onlyfiles = [f for f in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, f))]
+    encoded_imges = []
     for fname in onlyfiles:
         pil_img = Image.open(os.path.join(dirpath,fname), mode='r')
         byte_arr = io.BytesIO()
-        pil_img.save(byte_arr, format='JPG')
+        pil_img.save(byte_arr, format='JPEG')
         encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii')
         encoded_imges.append(encoded_img)
     return encoded_imges

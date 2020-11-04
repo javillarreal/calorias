@@ -120,6 +120,7 @@ def allowed_file(filename):
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload_image():
     if request.method == "POST":
+        print(request.files['image'])
         if 'image' not in request.files:
             flash('No file part')
             return "No pic uploaded", 400
