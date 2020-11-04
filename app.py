@@ -7,6 +7,8 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
+from flask_cors import CORS
+
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
 from PIL import Image
@@ -14,7 +16,11 @@ from config import Config
 import settings
 from image_functions import *
 
+
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 app.config.from_object(Config)
 app.debug = Config.DEBUG
 
