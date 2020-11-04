@@ -120,7 +120,6 @@ def allowed_file(filename):
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload_image():
     if request.method == "POST":
-        print(request.files['image'])
         if 'image' not in request.files:
             flash('No file part')
             return "No pic uploaded", 400
@@ -135,10 +134,19 @@ def upload_image():
             if image != True:
                 return "Image needs to be 960x960 or higher", 400
 
-            encoded_images = get_images(app.config['IMAGE_UPLOADS'])
-            return jsonify({'result': encoded_images}) 
+            result = get_images(app.config['IMAGE_UPLOADS'])
+            print(result)
+            return jsonify({'result': result})
+            #return result
             #result = convert_to_numpy(app.config['IMAGE_UPLOADS'])
             #return jsonify({"msg": "Image has been cropped"}), 200
+
+@app.route("/load-images", methods=["GET", "POST"])
+def load_images():
+    if request.method == "POST":
+        data = request.get_json()
+        print(data)
+
 
 if __name__ == '__main__':
     app.run()
