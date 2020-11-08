@@ -26,3 +26,12 @@ class User(db.Model):
     @property
     def full_name(self) -> str:
         return ' '.join(self.first_name, self.last_name)
+
+class Food(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), nullable=False, unique=True)
+    calories = db.Column(db.Float, nullable=False)
+    weight = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<User: {self.id}>'

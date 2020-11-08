@@ -144,8 +144,25 @@ def upload_image():
 @app.route("/load-images", methods=["GET", "POST"])
 def load_images():
     if request.method == "POST":
+        #receives array of strings
+        data = request.form.getlist("image")
+        #make prediction
+        result = make_prediction(data,app.config['IMAGE_UPLOADS'])
+        return jsonify({'result': result})
+        #retornar json con
+
+
+@app.route("/calories-estimation", methods=["GET", "POST"])
+def calories_estimation():
+    if request.method == "POST":
         data = request.get_json()
         print(data)
+        total_calories = 0
+        for f in food:
+            food = Food.query.filter_by(name=name).first()
+            total_calories = total calories + food.calories
+
+        return total_calories
 
 
 if __name__ == '__main__':
