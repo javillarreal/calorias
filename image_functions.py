@@ -72,7 +72,9 @@ def make_prediction(images, dirpath):
     pred_result = []
 
     for f in os.listdir(dirpath):
+        print("route: ", os.path.join(dirpath, f))
         if os.path.isfile(os.path.join(dirpath, f)):
+            print("f:", f)
             if f in images:
                 onlyfiles.append(f)
 
@@ -82,9 +84,9 @@ def make_prediction(images, dirpath):
     x = np.array([np.array(Image.open(os.path.join(dirpath,fname))) for fname in onlyfiles])
 
     #download model from S3
-    model = keras.models.load_model('path/to/location')
+    model = keras.models.load_model('./weights/model.h5')
     #make prediction
-    pred=model.predict(images)
+    pred=model.predict(x)
     pred_bool = (pred > 0.7)
 
     for i in range(len(pred)):

@@ -162,7 +162,7 @@ def upload_image():
                 return "Image needs to be 960x960 or higher", 400
 
             result = get_images(app.config['IMAGE_UPLOADS'])
-            print(result)
+            #print(result)
             return jsonify({'result': result})
             #return result
             #result = convert_to_numpy(app.config['IMAGE_UPLOADS'])
@@ -172,7 +172,8 @@ def upload_image():
 def load_images():
     if request.method == "POST":
         #receives array of strings
-        data = request.form.getlist("image")
+        data = request.form.getlist("image")[0].split(",")
+        print("data:", data)
         #make prediction
         result = make_prediction(data,app.config['IMAGE_UPLOADS'])
         return jsonify({'result': result})
