@@ -183,14 +183,14 @@ def load_images():
 @app.route("/calories-estimation", methods=["GET", "POST"])
 def calories_estimation():
     if request.method == "POST":
-        data = request.get_json()
-        print(data)
+        food = request.form.getlist("check")[0].split(",")
+        #print(food)
         total_calories = 0
         for f in food:
-            food = Food.query.filter_by(name=name).first()
+            food = Food.query.filter_by(name=f).first()
             total_calories = total_calories + food.calories
 
-        return total_calories
+        return jsonify({'result': total_calories})
 
 
 if __name__ == '__main__':

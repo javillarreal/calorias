@@ -94,17 +94,21 @@ def make_prediction(images, dirpath):
         carne.append(pred[i][0])
         pollo.append(pred[i][1])
         arroz.append(pred[i][2])
-        pasta.appen(pred[i][3])
+        pasta.append(pred[i][3])
         pure.append(pred[i][4])
         salmon.append(pred[i][5])
         ensalada.append(pred[i][6])
 
-    avg_carne = sum(carne) / len(carne)
-    avg_pollo = sum(pollo) / len(pollo)
-    avg_arroz = sum(arroz) / len(arroz)
-    avg_pure = sum(pure) / len(pure)
-    avg_salmon = sum(salmon) / len(salmon)
-    avg_ensalada = sum(ensalada) / len(ensalada)
+    avg_carne = (sum(carne) / len(carne))*100
+    avg_pollo = (sum(pollo) / len(pollo))*100
+    avg_arroz = (sum(arroz) / len(arroz))*100
+    avg_pure = (sum(pure) / len(pure))*100
+    avg_salmon = (sum(salmon) / len(salmon))*100
+    avg_ensalada = (sum(ensalada) / len(ensalada))*100
+    avg_pasta = (sum(pasta) / len(pasta))*100
+
+    print("carne",carne)
+    print("avg",avg_carne)
 
     pred_result.append({'carne': avg_carne, 'pollo': avg_pollo, 'arroz': avg_arroz, 'pasta': avg_pasta, 'pure': avg_pure, 'salmon': avg_salmon, 'ensalada': avg_ensalada})
     return pred_result
