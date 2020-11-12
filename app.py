@@ -39,6 +39,33 @@ from models import *
 def hello():
     return render_template('index.html')
 
+@app.route('/create-food', methods=['POST'])
+def create_food():
+    try:
+        name = request.json.get('name', None)
+        calories = request.json.get('calories', None)
+        weight = request.json.get('weight', None)
+
+        if not name:
+            return 'Missing name', 400
+        if not calories:
+            return 'Missing calories', 400
+        if not weight:
+            return 'Missing weight', 400
+
+        food = Food(name=name, calories=calories, weight=weight)
+        db.session.add(food)
+        db.session.commit()
+
+        #access_token = create_access_token(identity={"email": email})
+        return "Food has been created", 200
+    except IntegrityError:
+        # the rollback func reverts the changes made to the db ( so if an error happens after we commited changes they will be reverted )
+        db.session.rollback()
+        return 'Food Already Exists', 400
+    except AttributeError:
+        return 'Provide name, calories and weight in JSON format in the request body', 400
+
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -160,7 +187,7 @@ def calories_estimation():
         total_calories = 0
         for f in food:
             food = Food.query.filter_by(name=name).first()
-            total_calories = total calories + food.calories
+            total_calories = total_calories + food.calories
 
         return total_calories
 

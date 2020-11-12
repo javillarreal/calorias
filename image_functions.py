@@ -79,7 +79,7 @@ def make_prediction(images, dirpath):
     print(onlyfiles)
 
     #Convert images to numpy array for future prediction
-    x = np.array([np.array(Image.open(os.path.join(dirpath,fname)) for fname in onlyfiles])
+    x = np.array([np.array(Image.open(os.path.join(dirpath,fname))) for fname in onlyfiles])
 
     #download model from S3
     model = keras.models.load_model('path/to/location')
