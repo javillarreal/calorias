@@ -6,8 +6,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(40), nullable=False, unique=True)
     password_hash = db.Column(db.String(200), nullable=False)
-    height = db.Column(db.Integer, nullable=False)
-    weight = db.Column(db.Integer, nullable=False)
+    height = db.Column(db.Float, nullable=False)
+    weight = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f'<User: {self.email}>'
@@ -21,7 +21,9 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password, method='sha256')
 
     def check_password(self, password) -> bool:
-        return check_password_hash(self.password_hash, password)
+        print(password)
+        print(self.password_hash)
+        return self.password_hash == password
 
     @property
     def full_name(self) -> str:

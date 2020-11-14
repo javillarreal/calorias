@@ -71,13 +71,19 @@ def register():
     try:
         email = request.json.get('email', None)
         password = request.json.get('password', None)
+        height = request.json.get('height', None)
+        weight = request.json.get('weight', None)
 
         if not email:
             return 'Missing email', 400
         if not password:
             return 'Missing password', 400
-
-        user = User(email=email, password_hash=password)
+        if not height:
+            return 'Missing height', 400
+        if not weight:
+            return 'Missing weight', 400
+        
+        user = User(email=email, password_hash=password, height=height, weight=weight)
         db.session.add(user)
         db.session.commit()
 
@@ -117,6 +123,10 @@ def login():
 
     email = request.json.get('email', None)
     password = request.json.get('password', None)
+
+    print(email)
+    print(password)
+
     if not email:
         return jsonify({"msg": "Missing email parameter"}), 400
     if not password:
@@ -187,8 +197,8 @@ def calories_estimation():
         #print(food)
         total_calories = 0
         for f in food:
-            food = Food.query.filter_by(name=f).first()
-            total_calories = total_calories + food.calories
+            calories =  Food.query.filter_by(name=f).first()
+            total_calories = total_calories + calories
 
         return jsonify({'result': total_calories})
 
