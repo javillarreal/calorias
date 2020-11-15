@@ -58,7 +58,7 @@ def convert_to_numpy(dirpath):
     onlyfiles = [f for f in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, f))]
     print(onlyfiles)
     x = np.array([np.array(Image.open(dirpath+"/"+fname)) for fname in onlyfiles])
-    print(x)
+    #print(x)
     return "True"
 
 def make_prediction(images, dirpath):
@@ -73,9 +73,9 @@ def make_prediction(images, dirpath):
     pred_result = []
 
     for f in os.listdir(dirpath):
-        print("route: ", os.path.join(dirpath, f))
+        #print("route: ", os.path.join(dirpath, f))
         if os.path.isfile(os.path.join(dirpath, f)):
-            print("f:", f)
+            #print("f:", f)
             if f in images:
                 onlyfiles.append(f)
 

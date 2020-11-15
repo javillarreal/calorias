@@ -17,6 +17,8 @@ from config import Config
 import settings
 from image_functions import *
 
+import os 
+
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -194,12 +196,14 @@ def load_images():
 def calories_estimation():
     if request.method == "POST":
         food = request.form.getlist("check")[0].split(",")
-        #print(food)
+        print(food)
         total_calories = 0
         for f in food:
-            calories =  Food.query.filter_by(name=f).first()
-            total_calories = total_calories + calories
+            food_db  =  Food.query.filter_by(name=f).first()
+            print(food_db)
+            total_calories = total_calories + food_db.calories
 
+        os.system("rm -rf "+ app.config['IMAGE_UPLOADS']+"/*")
         return jsonify({'result': total_calories})
 
 
