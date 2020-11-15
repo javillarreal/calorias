@@ -16,11 +16,18 @@ from PIL import Image
 from config import Config
 import settings
 from image_functions import *
-
+from flask_sslify import SSLify
+from OpenSSL import SSL
 import os 
 
+#context = SSL.Context(SSL.SSLv23_METHOD)
+#context.use_privatekey_file('keys/nginx.key')
+#context.use_certificate_file('keys/nginx.crt')
 
 app = Flask(__name__)
+#context = ('keys/nginx.crt', 'keys/nginx.key')
+#sslify = SSLify(app)
+
 app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -208,4 +215,5 @@ def calories_estimation():
 
 
 if __name__ == '__main__':
+    #context = ('keys/nginx.crt', 'keys/nginx.key') 
     app.run()
