@@ -12,5 +12,9 @@ def create_db():
     db.create_all()
     db.session.commit()
 
+@cli.command('commit')
+def create_food_image():
+    db.session.commit()
+
 if __name__ == '__main__':
     cli()
