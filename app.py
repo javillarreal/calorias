@@ -18,7 +18,7 @@ import settings
 from image_functions import *
 from flask_sslify import SSLify
 from OpenSSL import SSL
-import os 
+import os
 
 #context = SSL.Context(SSL.SSLv23_METHOD)
 #context.use_privatekey_file('keys/nginx.key')
@@ -91,7 +91,7 @@ def register():
             return 'Missing height', 400
         if not weight:
             return 'Missing weight', 400
-        
+
         user = User(email=email, password_hash=password, height=height, weight=weight)
         db.session.add(user)
         db.session.commit()
@@ -176,6 +176,7 @@ def upload_image():
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
             [filename,num] = filename.split(".")
+            os.system("rm -rf "+ app.config['IMAGE_UPLOADS']+"/*")
             image = crop_images(app.config['IMAGE_UPLOADS'], image, 224, 224, 0, 1, 0, filename)
             if image != True:
                 return "Image needs to be 960x960 or higher", 400
@@ -210,10 +211,31 @@ def calories_estimation():
             print(food_db)
             total_calories = total_calories + food_db.calories
 
-        os.system("rm -rf "+ app.config['IMAGE_UPLOADS']+"/*")
+        #os.system("rm -rf "+ app.config['IMAGE_UPLOADS']+"/*")
         return jsonify({'result': total_calories})
 
+@app.route("/save-food-image", methods=["GET", "POST"])
+def save_food_image():
+    if request.method == "POST":
+        data = request.get_json()
+        print(data)
+        user_email = data['user']
+        image_name = data['img_name']
+        categories = data['cat']
+
+        user = User.query.filter_by(email=user_email).first()
+        image = Image(user_id=user.id, name=image_name, categories=categories)
+        db.session.add(food)
+        db.session.commit()
+
+        return jsonify({"msg": "Food image has been saved"}), 200
+
+@app.route("/get-food-image", methods=["GET", "POST"])
+def get_food_images():
+    if request.method == "POST":
+        images = Image.query.filter_by(user_id=user_id)
+        return jsonify({'result': total_calories})
 
 if __name__ == '__main__':
-    #context = ('keys/nginx.crt', 'keys/nginx.key') 
+    #context = ('keys/nginx.crt', 'keys/nginx.key')
     app.run()

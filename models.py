@@ -37,3 +37,12 @@ class Food(db.Model):
 
     def __repr__(self):
         return f'<User: {self.id}>'
+
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.relationship('User', uselist=False)
+    name = db.Column(db.String(40), nullable=False, unique=True)
+    categories = db.Column(db.String(40), nullable=False)
+
+    def __repr__(self):
+        return f'<User: {self.id}>'
