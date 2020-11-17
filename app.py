@@ -250,12 +250,25 @@ def get_food_images():
         #print("images", images)
         images = Image.query.filter_by(user_id=user.id).all()
         for i in images:
-            print("i: ",i)
-            print("i.name: ",i.name)
-            os.system("aws s3 cp s3://caloriapp-food-images/"+i.name+" "+app.config['IMAGE_TEMP']+i.name)
-        result = get_images(app.config['IMAGE_UPLOADS'])
-        #print("images all", images)
-        return jsonify({'result': result})
+            #print("i: ",i)
+            #print("i.name: ",i.name)
+            os.system("aws s3 cp s3://caloriapp-food-images/"+i.name+" "+app.config['IMAGE_TEMP']+"/"+i.name)
+            categories = i.categories.split(",")
+        result = get_images(app.config['IMAGE_TEMP'])
+
+        data_retrieve = []
+        for img in result:
+            sw = True
+            for i in images:
+                if i.name == img['name']:
+                    data_retrieve.append({'cat': i.categories.split(","), 'image': img})
+                    sw = False
+                if not sw:
+                    break
+            
+
+        print("data_retrieve all", data_retrieve)
+        return jsonify({'result': data_retrieve})
 
 if __name__ == '__main__':
     #context = ('keys/nginx.crt', 'keys/nginx.key')
