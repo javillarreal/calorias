@@ -177,6 +177,7 @@ def upload_image():
             filename = secure_filename(image.filename)
             [filename,num] = filename.split(".")
             os.system("rm -rf "+ app.config['IMAGE_UPLOADS']+"/*")
+            os.system("mkdir "+app.config['IMAGE_UPLOADS']+"/original")
             image = crop_images(app.config['IMAGE_UPLOADS'], image, 224, 224, 0, 1, 0, filename)
             if image != True:
                 return "Image needs to be 960x960 or higher", 400
@@ -222,6 +223,8 @@ def save_food_image():
         user_email = data['user']
         image_name = data['img_name']
         categories = data['cat']
+
+        os.system("aws s3 cp "+os.path.join(app.config['IMAGE_UPLOADS']+"/original/",image_name+".jpg")+" s3://caloriapp-food-images/"+image_name+".jpg")
 
         user = User.query.filter_by(email=user_email).first()
         image = Image(user_id=user.id, name=image_name, categories=categories)

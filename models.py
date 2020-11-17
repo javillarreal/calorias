@@ -40,7 +40,7 @@ class Food(db.Model):
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.relationship('User', uselist=False)
+    user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), nullable=False, unique=True)
     categories = db.Column(db.String(40), nullable=False)
 
