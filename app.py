@@ -245,15 +245,17 @@ def get_food_images():
         data = request.get_json()
         user_email = data['user']
         user = User.query.filter_by(email=user_email).first()
-        print(user)
-        images = Image.query.filter_by(user_id=user.id)
-        print("images", images)
+        #print(user)
+        #images = Image.query.filter_by(user_id=user.id)
+        #print("images", images)
         images = Image.query.filter_by(user_id=user.id).all()
         for i in images:
             print("i: ",i)
             print("i.name: ",i.name)
-        print("images all", images)
-        return jsonify({'result': images})
+            os.system("aws s3 cp s3://caloriapp-food-images/"+i.name+" "+app.config['IMAGE_TEMP']+i.name)
+        result = get_images(app.config['IMAGE_UPLOADS'])
+        #print("images all", images)
+        return jsonify({'result': result})
 
 if __name__ == '__main__':
     #context = ('keys/nginx.crt', 'keys/nginx.key')

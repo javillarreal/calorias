@@ -9,3 +9,4 @@ class Config(object):
     JWT_SECRET_KEY = settings.flask['JWT_SECRET_KEY']
     IMAGE_UPLOADS = settings.flask['IMAGE_UPLOADS']
     ALLOWED_EXTENSIONS = settings.flask['ALLOWED_EXTENSIONS']
+    IMAGE_TEMP = settings.flask['IMAGE_TEMP']

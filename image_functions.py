@@ -28,7 +28,7 @@ def crop_images(path, input, height, width, k, page, area, string):
         return False
     else:
         im.save(os.path.join(path+"/original/",string+".jpg"))
-        os.system("aws s3 cp "+os.path.join(path+"/original/",string+".jpg")+" s3://caloriapp-food-images/"+string+".jpg")        
+        os.system("aws s3 cp "+os.path.join(path+"/original/",string+".jpg")+" s3://caloriapp-food-images/"+string+".jpg")
         for i in range(0,imgheight,height):
             for j in range(0,imgwidth,width):
                 box = (j, i, j+width, i+height)

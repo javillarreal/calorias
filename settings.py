@@ -11,5 +11,6 @@ flask = {
     'SECRET_KEY': os.getenv('SECRET_KEY'),
     'JWT_SECRET_KEY': os.getenv('JWT_SECRET_KEY'),
     'IMAGE_UPLOADS': os.getenv('IMAGE_UPLOADS'),
+    'IMAGE_TEMP': os.getenv('IMAGE_TEMP'),
     'ALLOWED_EXTENSIONS': os.getenv('ALLOWED_EXTENSIONS')
 }
