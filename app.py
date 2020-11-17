@@ -242,8 +242,18 @@ def save_food_image():
 @app.route("/get-food-image", methods=["GET", "POST"])
 def get_food_images():
     if request.method == "POST":
-        images = Image.query.filter_by(user_id=user_id)
-        return jsonify({'result': total_calories})
+        data = request.get_json()
+        user_email = data['user']
+        user = User.query.filter_by(email=user_email).first()
+        print(user)
+        images = Image.query.filter_by(user_id=user.id)
+        print("images", images)
+        images = Image.query.filter_by(user_id=user.id).all()
+        for i in images:
+            print("i: ",i)
+            print("i.name: ",i.name)
+        print("images all", images)
+        return jsonify({'result': images})
 
 if __name__ == '__main__':
     #context = ('keys/nginx.crt', 'keys/nginx.key')
