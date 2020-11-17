@@ -222,13 +222,19 @@ def save_food_image():
         print(data)
         user_email = data['user']
         image_name = data['img_name']
-        categories = data['cat']
+        total = ""
+        for cat in data['cat']:
+            total = total + cat+ ","
+        total = total[:len(total)-1]
+        print(total)
 
-        os.system("aws s3 cp "+os.path.join(app.config['IMAGE_UPLOADS']+"/original/",image_name+".jpg")+" s3://caloriapp-food-images/"+image_name+".jpg")
+        categories = total
+
+        os.system("aws s3 cp "+os.path.join(app.config['IMAGE_UPLOADS']+"/original/",image_name)+" s3://caloriapp-food-images/"+image_name)
 
         user = User.query.filter_by(email=user_email).first()
         image = Image(user_id=user.id, name=image_name, categories=categories)
-        db.session.add(food)
+        db.session.add(image)
         db.session.commit()
 
         return jsonify({"msg": "Food image has been saved"}), 200
